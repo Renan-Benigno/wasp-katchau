@@ -48,7 +48,7 @@ def main():
         return
 
     # Nome do arquivo
-    baseline_name = st.text_input("Qual o nome do arquivo?", "benchmark") + ".ts"
+    benchmark_name = st.text_input("Qual o nome do arquivo?", "benchmark") + ".ts"
 
     # Initialize session state to store sections
     if "sections" not in st.session_state:
@@ -83,7 +83,7 @@ def main():
         st.download_button(
             label="Baixar Arquivo",
             data=file_content,
-            file_name=baseline_name,
+            file_name=benchmark_name,
             mime="text/plain"
         )
 
