@@ -12,7 +12,7 @@ def gerar_val(first_val, second_val, is_random, lines):
             yield first_val + i * intervalo
 
 def captar_param(tipo, section_num):
-    st.write(f"### {tipo} Configuration")
+    st.write(f"### {tipo}")
     # Use a unique key for each widget
     is_random = st.radio(f"{tipo} randômico ou ordenado?", ("R", "O"), key=f"{tipo}_random_{section_num}")
     val_inicio = st.number_input(f"De quanto? ({tipo})", key=f"{tipo}_start_{section_num}")
@@ -35,6 +35,7 @@ def secao(section_num, num_lines):
         ccl = next(ccl_gen)
         voltage = next(voltage_gen)
         current = next(current_gen)
+
         line = f"\"1000,{depth: .2f},{speed: .2f},{tension: .2f},{ccl: .2f},{voltage: .2f},{current: .2f},5,6,7\","
         lines.append(line + "\n")
         st.write(line)
@@ -42,7 +43,7 @@ def secao(section_num, num_lines):
     return lines
 
 def main():
-    st.title("Warrior File Generator")
+    st.title("Warrior")
 
     # Define o caminho para salvar o arquivo
     path = os.path.join(os.path.expanduser("~"), "Desktop")
