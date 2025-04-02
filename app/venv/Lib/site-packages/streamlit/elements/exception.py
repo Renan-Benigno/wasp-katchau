@@ -43,6 +43,10 @@ class ExceptionMixin:
     def exception(self, exception: BaseException) -> DeltaGenerator:
         """Display an exception.
 
+        In the lower-right corner of the exception, Streamlit displays links to
+        Google and ChatGPT that are prefilled with the contents of the
+        exception message.
+
         Parameters
         ----------
         exception : Exception
@@ -54,6 +58,10 @@ class ExceptionMixin:
         >>>
         >>> e = RuntimeError("This is an exception of type RuntimeError")
         >>> st.exception(e)
+
+        .. output ::
+            https://doc-status-exception.streamlit.app/
+            height: 220px
 
         """
         return _exception(self.dg, exception)
@@ -180,7 +188,9 @@ Traceback:
 
 def _format_syntax_error_message(exception: SyntaxError) -> str:
     """Returns a nicely formatted SyntaxError message that emulates
-    what the Python interpreter outputs, e.g.:
+    what the Python interpreter outputs.
+
+    For example:
 
     > File "raven.py", line 3
     >   st.write('Hello world!!'))

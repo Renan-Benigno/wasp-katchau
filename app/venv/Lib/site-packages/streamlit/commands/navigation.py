@@ -26,6 +26,7 @@ from streamlit.navigation.page import StreamlitPage
 from streamlit.proto.ForwardMsg_pb2 import ForwardMsg
 from streamlit.proto.Navigation_pb2 import Navigation as NavigationProto
 from streamlit.runtime.metrics_util import gather_metrics
+from streamlit.runtime.pages_manager import PagesManager
 from streamlit.runtime.scriptrunner_utils.script_run_context import (
     ScriptRunContext,
     get_script_run_ctx,
@@ -255,6 +256,9 @@ def navigation(
     .. _st.Page: https://docs.streamlit.io/develop/api-reference/navigation/st.page
 
     """
+    # Disable the use of the pages feature (ie disregard v1 behavior of Multipage Apps)
+    PagesManager.uses_pages_directory = False
+
     return _navigation(pages, position=position, expanded=expanded)
 
 
@@ -272,7 +276,6 @@ def _navigation(
             section: [convert_to_streamlit_page(p) for p in section_pages]
             for section, section_pages in pages.items()
         }
-
     page_list = pages_from_nav_sections(nav_sections)
 
     if not page_list:

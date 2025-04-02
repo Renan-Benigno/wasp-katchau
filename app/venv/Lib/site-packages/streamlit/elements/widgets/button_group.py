@@ -149,7 +149,7 @@ class SingleOrMultiSelectSerde(Generic[T]):
         )
 
     def serialize(self, value: T | list[T] | None) -> list[int]:
-        return self.serde.serialize(cast(Any, value))
+        return self.serde.serialize(cast("Any", value))
 
     def deserialize(
         self, ui_value: list[int] | None, widget_id: str = ""
@@ -537,7 +537,6 @@ class ButtonGroupMixin:
 
         Examples
         --------
-
         **Example 1: Multi-select pills**
 
         Display a multi-select pills widget, and show the selection:
@@ -747,7 +746,6 @@ class ButtonGroupMixin:
 
         Examples
         --------
-
         **Example 1: Multi-select segmented control**
 
         Display a multi-select segmented control widget, and show the
@@ -831,7 +829,8 @@ class ButtonGroupMixin:
 
         def _transformed_format_func(option: V) -> ButtonGroupProto.Option:
             """If option starts with a material icon or an emoji, we extract it to send
-            it parsed to the frontend."""
+            it parsed to the frontend.
+            """
             transformed = format_func(option) if format_func else str(option)
             transformed_parts = transformed.split(" ")
             icon: str | None = None

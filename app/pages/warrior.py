@@ -77,7 +77,7 @@ def main():
         if num_lines_input.isdigit():
             section["num_lines"] = int(num_lines_input)
         else:
-            st.warning("Por favor, insira um número inteiro válido.")
+            st.warning("Por favor, insira um número inteiro positivo válido.")
 
         section_lines = secao(section["section_num"], section["num_lines"])
         all_lines.extend(section_lines)
