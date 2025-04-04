@@ -88,15 +88,15 @@ def main():
     for i, section in enumerate(st.session_state.sections):
         st.write(f"### Seção {section['section_num']}")
         # Usando st.text_input em vez de st.number_input
-        num_lines_input = st.text_input(
+        num_lines_input_baseline = st.text_input(
             f"Quantas linhas da seção {section['section_num']}?", 
             value=str(section["num_lines"]),
-            key=f"lines_{section['section_num']}",
+            key=f"lines_{section['section_num']}"
         )
 
         # Validando se a entrada é um número
-        if num_lines_input.isdigit():
-            section["num_lines"] = int(num_lines_input)
+        if num_lines_input_baseline.isdigit():
+            section["num_lines"] = int(num_lines_input_baseline)
         else:
             st.warning("Por favor, insira um número inteiro positivo válido.")
             
