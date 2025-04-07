@@ -66,7 +66,7 @@ def main():
         num_lines_input_benchmark = st.text_input(
             f"Quantas linhas da seção {section['section_num']}?", 
             value=str(section["num_lines"]),
-            key=f"lines_{section['section_num']}"
+            key=f"page_benchmark_lines_{section['section_num']}"
         )
 
         # Validando se a entrada é um número

@@ -70,7 +70,7 @@ def main():
         num_lines_input_warrior = st.text_input(
             f"Quantas linhas da seção {section['section_num']}?", 
             value=str(section["num_lines"]),
-            key=f"lines_{section['section_num']}"
+            key=f"page_warrior_lines_{section['section_num']}"
         )
 
         # Validando se a entrada é um número
