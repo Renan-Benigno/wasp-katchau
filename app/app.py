@@ -7,7 +7,7 @@ from pages import baseline
 
 def main():
     st.title("KATCHAU")
-    st.text('Website to generate files for Warrior, Benchmark and Baseline CCL files')
+    st.text('Descubra como usar')
     
     
     
