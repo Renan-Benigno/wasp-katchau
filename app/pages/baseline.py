@@ -7,9 +7,14 @@ def gerar_val(first_val, second_val, is_random, lines):
         for _ in range(lines):
             yield random.uniform(first_val, second_val)
     elif is_random == "O":
-        intervalo = (second_val - first_val) / (lines - 1)
-        for i in range(lines):
-            yield first_val + i * intervalo
+        if lines > 1:
+            intervalo = (second_val - first_val) / (lines - 1)
+            for i in range(lines):
+                yield first_val + i * intervalo
+        else:
+            intervalo = (second_val - first_val) / lines
+            for i in range(lines):
+                yield first_val + i * intervalo
 
 def captar_param(tipo, section_num):
     st.write(f"### {tipo}")
@@ -30,8 +35,11 @@ def captar_param_depth(section_num, prev_depth=None):
         else:
             val_inicio = prev_depth + 0.0001
     valor_fim = st.number_input(f"Pra quanto? ", key=f"Depth_end_{section_num}")
-    if direction == "Up" and val_inicio < valor_fim or direction == "Down" and val_inicio > valor_fim :
-        st.write(f"Valores dados não batem com a direção")
+    if direction == "Up" and val_inicio < valor_fim :
+        st.write(f"Valores dados não condizem com a direção. Se a direction desejada é realmente 'Up', deixe o primeiro valor maior que o segundo valor ")
+        return
+    elif direction == "Down" and val_inicio > valor_fim :
+        st.write(f"Valores dados não condizem com a direção. Se a direction desejada é realmente 'Down', deixe o primeiro valor menor que o segundo valor ")
         return
     return [val_inicio, valor_fim]
 
@@ -53,8 +61,12 @@ def secao(section_num, num_lines):
         line = f"  {depth: .4f}    000.0000    000.00000      0.0000      0.0000     {ccl: .4f}    000.0000      0.0000"
 
         lines.append(line + "\n")
-        st.write(line)
 
+    all_lines = "".join(lines)  # Concatena todas as linhas em uma única string
+    if num_lines < 18:
+        st.code(all_lines, language="text") # Exibe a string em uma caixa de código
+    else:
+        st.code(all_lines, language="text", height = 400) # Exibe a string em uma caixa de código com limite de tamanho
     return lines
 
 direction = None
@@ -87,12 +99,19 @@ def main():
     all_lines = []
     for i, section in enumerate(st.session_state.sections):
         st.write(f"### Seção {section['section_num']}")
-        section["num_lines"] = st.number_input(
+        # Usando st.text_input em vez de st.number_input
+        num_lines_input_baseline = st.text_input(
             f"Quantas linhas da seção {section['section_num']}?", 
-            min_value=1, 
-            value=section.get("num_lines", 2),  # Define o valor padrão como 2 caso não exista valor em `section["num_lines"]`
+            value=str(section["num_lines"]),
             key=f"lines_{section['section_num']}"
         )
+
+        # Validando se a entrada é um número
+        if num_lines_input_baseline.isdigit():
+            section["num_lines"] = int(num_lines_input_baseline)
+        else:
+            st.warning("Por favor, insira um número inteiro positivo válido.")
+            
         section_lines = secao(section["section_num"], section["num_lines"])
         all_lines.extend(section_lines)
 

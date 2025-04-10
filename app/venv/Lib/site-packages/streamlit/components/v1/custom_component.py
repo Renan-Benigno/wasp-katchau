@@ -101,7 +101,7 @@ class CustomComponent(BaseCustomComponent):
             raise MarshallComponentException(f"Argument '{args[0]}' needs a label")
 
         try:
-            import pyarrow  # noqa: F401
+            import pyarrow  # noqa: F401, ICN001
 
             from streamlit.components.v1 import component_arrow
         except ImportError:
@@ -118,7 +118,7 @@ And if you're using Streamlit Cloud, add "pyarrow" to your requirements.txt."""
         # In addition to the custom kwargs passed to the component, we also
         # send the special 'default' and 'key' params to the component
         # frontend.
-        all_args = dict(kwargs, **{"default": default, "key": key})
+        all_args = dict(kwargs, default=default, key=key)
 
         json_args = {}
         special_args = []

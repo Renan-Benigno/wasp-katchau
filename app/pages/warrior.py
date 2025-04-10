@@ -38,8 +38,13 @@ def secao(section_num, num_lines):
 
         line = f"\"1000,{depth: .2f},{speed: .2f},{tension: .2f},{ccl: .2f},{voltage: .2f},{current: .2f},5,6,7\","
         lines.append(line + "\n")
-        st.write(line)
 
+
+    all_lines = "".join(lines)  # Concatena todas as linhas em uma única string
+    if num_lines < 18:
+        st.code(all_lines, language="text") # Exibe a string em uma caixa de código
+    else:
+        st.code(all_lines, language="text", height = 400) # Exibe a string em uma caixa de código com limite de tamanho
     return lines
 
 def main():
@@ -66,12 +71,19 @@ def main():
     all_lines = []
     for i, section in enumerate(st.session_state.sections):
         st.write(f"### Seção {section['section_num']}")
-        section["num_lines"] = st.number_input(
+        # Usando st.text_input em vez de st.number_input
+        num_lines_input_warrior = st.text_input(
             f"Quantas linhas da seção {section['section_num']}?", 
-            min_value=1, 
-            value=section["num_lines"], 
+            value=str(section["num_lines"]),
             key=f"lines_{section['section_num']}"
         )
+
+        # Validando se a entrada é um número
+        if num_lines_input_warrior.isdigit():
+            section["num_lines"] = int(num_lines_input_warrior)
+        else:
+            st.warning("Por favor, insira um número inteiro positivo válido.")
+
         section_lines = secao(section["section_num"], section["num_lines"])
         all_lines.extend(section_lines)
 
