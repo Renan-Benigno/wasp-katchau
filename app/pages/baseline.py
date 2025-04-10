@@ -7,9 +7,14 @@ def gerar_val(first_val, second_val, is_random, lines):
         for _ in range(lines):
             yield random.uniform(first_val, second_val)
     elif is_random == "O":
-        intervalo = (second_val - first_val) / (lines - 1)
-        for i in range(lines):
-            yield first_val + i * intervalo
+        if lines > 1:
+            intervalo = (second_val - first_val) / (lines - 1)
+            for i in range(lines):
+                yield first_val + i * intervalo
+        else:
+            intervalo = (second_val - first_val) / lines
+            for i in range(lines):
+                yield first_val + i * intervalo
 
 def captar_param(tipo, section_num):
     st.write(f"### {tipo}")
@@ -56,8 +61,12 @@ def secao(section_num, num_lines):
         line = f"  {depth: .4f}    000.0000    000.00000      0.0000      0.0000     {ccl: .4f}    000.0000      0.0000"
 
         lines.append(line + "\n")
-        st.write(line)
 
+    all_lines = "".join(lines)  # Concatena todas as linhas em uma única string
+    if num_lines < 18:
+        st.code(all_lines, language="text") # Exibe a string em uma caixa de código
+    else:
+        st.code(all_lines, language="text", height = 400) # Exibe a string em uma caixa de código com limite de tamanho
     return lines
 
 direction = None

@@ -38,8 +38,13 @@ def secao(section_num, num_lines):
 
         line = f"\"1000,{depth: .2f},{speed: .2f},{tension: .2f},{ccl: .2f},{voltage: .2f},{current: .2f},5,6,7\","
         lines.append(line + "\n")
-        st.write(line)
 
+
+    all_lines = "".join(lines)  # Concatena todas as linhas em uma única string
+    if num_lines < 18:
+        st.code(all_lines, language="text") # Exibe a string em uma caixa de código
+    else:
+        st.code(all_lines, language="text", height = 400) # Exibe a string em uma caixa de código com limite de tamanho
     return lines
 
 def main():
