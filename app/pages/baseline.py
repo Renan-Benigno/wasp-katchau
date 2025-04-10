@@ -11,40 +11,40 @@ def gerar_val(first_val, second_val, is_random, lines):
         for i in range(lines):
             yield first_val + i * intervalo
 
-def captar_param(tipo, section_num):
+def captar_param(tipo, section_num_baseline):
     st.write(f"### {tipo}")
     # Use a unique key for each widget
-    is_random = st.radio(f"{tipo} randômico ou ordenado?", ("R", "O"), key=f"{tipo}_random_{section_num}")
-    val_inicio = st.number_input(f"De quanto? ", key=f"{tipo}_start_{section_num}")
-    valor_fim = st.number_input(f"Pra quanto? ", key=f"{tipo}_end_{section_num}")
+    is_random = st.radio(f"{tipo} randômico ou ordenado?", ("R", "O"), key=f"{tipo}_random_{section_num_baseline}")
+    val_inicio = st.number_input(f"De quanto? ", key=f"{tipo}_start_{section_num_baseline}")
+    valor_fim = st.number_input(f"Pra quanto? ", key=f"{tipo}_end_{section_num_baseline}")
     return [val_inicio, valor_fim, is_random]
 
-def captar_param_depth(section_num, prev_depth=None):
+def captar_param_depth(section_num_baseline, prev_depth=None):
     global direction
     st.write(f"### Depth")
     if prev_depth is None:
-        val_inicio = st.number_input(f"De quanto? ", key=f"Depth_start_{section_num}")
+        val_inicio = st.number_input(f"De quanto? ", key=f"Depth_start_{section_num_baseline}")
     else:
         if direction == "Up":
             val_inicio = prev_depth - 0.0001
         else:
             val_inicio = prev_depth + 0.0001
-    valor_fim = st.number_input(f"Pra quanto? ", key=f"Depth_end_{section_num}")
+    valor_fim = st.number_input(f"Pra quanto? ", key=f"Depth_end_{section_num_baseline}")
     if direction == "Up" and val_inicio < valor_fim or direction == "Down" and val_inicio > valor_fim :
         st.write(f"Valores dados não batem com a direção")
         return
     return [val_inicio, valor_fim]
 
-def secao(section_num, num_lines):
+def secao(section_num_baseline, num_lines):
     global previous
-    if section_num == 1:
-        ini_depth, fim_depth = captar_param_depth(section_num)
+    if section_num_baseline == 1:
+        ini_depth, fim_depth = captar_param_depth(section_num_baseline)
         depth_gen = gerar_val(ini_depth, fim_depth, "O", num_lines)
         previous = fim_depth
     else:
-        depth_gen = gerar_val(*captar_param_depth(section_num, previous), "O", num_lines)
+        depth_gen = gerar_val(*captar_param_depth(section_num_baseline, previous), "O", num_lines)
 
-    ccl_gen = gerar_val(*captar_param("CCL", section_num), num_lines)
+    ccl_gen = gerar_val(*captar_param("CCL", section_num_baseline), num_lines)
 
     lines = []
     for _ in range(num_lines):
@@ -56,6 +56,14 @@ def secao(section_num, num_lines):
         st.write(line)
 
     return lines
+
+def criar_secaos_baseline():
+    """
+    Função para criar uma nova seção e atualizar o st.session_state.
+    """
+    if st.button("Nova seção?"):
+        new_section_num_ = len(st.session_state["baseline_sections"]) + 1
+        st.session_state["baseline_sections"].append({"section_num_baseline": new_section_num_, "num_lines": 1})
 
 direction = None
 previous = None
@@ -74,24 +82,23 @@ def main():
     baseline_name = st.text_input("Qual o nome do arquivo?", "baseline") + ".las"
 
     # Initialize session state to store sections
-    if "sections" not in st.session_state:
-        st.session_state.sections = []
+    if "baseline_sections" not in st.session_state:
+        st.session_state["baseline_sections"] = []
 
     direction = st.radio(f"Qual a direção do pass?", ("Up", "Down"))
 
-    # Add a new section
-    if st.button("Nova seção?"):
-        st.session_state.sections.append({"section_num": len(st.session_state.sections) + 1, "num_lines": 1})
+    # Chama a função para criar a seção
+    criar_secaos_baseline()
 
     # Display and configure each section
     all_lines = []
-    for i, section in enumerate(st.session_state.sections):
-        st.write(f"### Seção {section['section_num']}")
+    for i, section in enumerate(st.session_state.baseline_sections):
+        st.write(f"### Seção {section['section_num_baseline']}")
         # Usando st.text_input em vez de st.number_input
         num_lines_input_baseline = st.text_input(
-            f"Quantas linhas da seção {section['section_num']}?", 
+            f"Quantas linhas da seção {section['section_num_baseline']}?", 
             value=str(section["num_lines"]),
-            key=f"page_baseline_lines_{section['section_num']}"
+            key=f"page_baseline_lines_{section['section_num_baseline']}"
         )
 
         # Validando se a entrada é um número
@@ -100,7 +107,7 @@ def main():
         else:
             st.warning("Por favor, insira um número inteiro positivo válido.")
             
-        section_lines = secao(section["section_num"], section["num_lines"])
+        section_lines = secao(section["section_num_baseline"], section["num_lines"])
         all_lines.extend(section_lines)
 
     # Add the LAS file header
