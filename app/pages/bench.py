@@ -42,10 +42,10 @@ def main():
     st.title("Benchmark")
 
     # Define o caminho para salvar o arquivo
-    path = os.path.join(os.path.expanduser("~"), "Desktop")
-    if not os.path.exists(path):
-        st.error(f"Diretório não encontrado: {path}")
-        return
+    #path = os.path.join(os.path.expanduser("~"), "Desktop")
+    #if not os.path.exists(path):
+    #    st.error(f"Diretório não encontrado: {path}")
+    #    return
 
     # Nome do arquivo
     benchmark_name = st.text_input("Qual o nome do arquivo?", "benchmark") + ".ts"
