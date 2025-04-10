@@ -1,7 +1,9 @@
 import random
 import os
 import streamlit as st
-
+from pages import baseline
+from pages import bench
+from pages import baseline
 
 def main():
     st.title("KATCHAU")
