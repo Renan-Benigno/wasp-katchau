@@ -29,9 +29,12 @@ def captar_param_depth(section_num_baseline, prev_depth=None):
             val_inicio = prev_depth - 0.0001
         else:
             val_inicio = prev_depth + 0.0001
-    valor_fim = st.number_input(f"Pra quanto? ", key=f"Depth_end_{section_num_baseline}")
-    if direction == "Up" and val_inicio < valor_fim or direction == "Down" and val_inicio > valor_fim :
-        st.write(f"Valores dados não batem com a direção")
+    valor_fim = st.number_input(f"Pra quanto? ", key=f"Depth_end_{section_num}")
+    if direction == "Up" and val_inicio < valor_fim :
+        st.write(f"Valores dados não condizem com a direção. Se a direction desejada é realmente 'Up', deixe o primeiro valor maior que o segundo valor ")
+        return
+    elif direction == "Down" and val_inicio > valor_fim :
+        st.write(f"Valores dados não condizem com a direção. Se a direction desejada é realmente 'Down', deixe o primeiro valor menor que o segundo valor ")
         return
     return [val_inicio, valor_fim]
 
