@@ -7,7 +7,9 @@ from pages import baseline
 
 def main():
     st.title("KATCHAU")
-    st.text('Descubra como usar')
+    st.text(
+        'O Katchau é um gerador de arquivos Warrior, Benchmark e Baseline. ' \
+        'Ele gera o arquivo por seções, possibilitando escolher a quantidade de linhas os valores que os seus argumentos variam por seção.')
     
     
     
